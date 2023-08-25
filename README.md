@@ -1,8 +1,11 @@
-# asd_asignment_base
+# README FOR THIS CODE
 
 
 How To Run Frontend 
 
-  - Ensure you have CD'd into the frontend with 'cd frotend/'
-  - Once you are in the front end type 'npm start'
-
+- Ensure you have CD'd into the frontend with:
+  ```bash
+  cd frontend/
+- Run the npm command to start the project locally
+   ```bash
+  npm start
