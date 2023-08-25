@@ -1,6 +1,9 @@
 # README FOR THIS CODE
 
 
+# Running your environments 
+It is good practice to have multiple terminals open when working with full stack in order to monitor both your front and backend! You can do this by clicking the little + to the right of the terminal. You will then be able to open infinite terminals and initiate both a front and back end locally on your machine with the following steps.
+
 How To Run Frontend 
 
 - Ensure you have CD'd into the frontend with:
@@ -11,10 +14,12 @@ How To Run Frontend
   npm start
 
 How To Run Backend 
+*If you go into the backend folder there is also a preconfigured readme from nest to give you some context of their framework*
   - Ensure you have CD's into the backend with: 
     ```bash
     cd backend/
   - Run the npm command to start the backend locally
       ```bash
       npn run start
+ 
   
