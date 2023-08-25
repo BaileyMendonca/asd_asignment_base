@@ -14,12 +14,12 @@ How To Run Frontend
   npm start
 
 How To Run Backend 
-*If you go into the backend folder there is also a preconfigured readme from nest to give you some context of their framework*
   - Ensure you have CD's into the backend with: 
     ```bash
     cd backend/
   - Run the npm command to start the backend locally
       ```bash
       npn run start
+*Note: If you go into the backend folder there is also a preconfigured readme from nest to give you some context of their framework*
  
   
