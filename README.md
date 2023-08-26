@@ -28,7 +28,17 @@ Since we are using nestJs we can actually use their inbuilt command from the ter
   ```bash
   nest g module NAME
 ```
-This will create a folder for that module and add it to the app.modules 
+This will create a folder for that module and add it to the app.modules. 
+Similarly you can do 
+```bash
+  nest g service NAME --no-spec
+```
+to create a service annd
+```bash
+  nest g controller NAME --no-spec
+``` 
+*Note: We don't want a spec so we give it that extra argument here, but a module doesn't have a spec so not needed for that command*
+
 
 
 # Working with Prisma for Backend
