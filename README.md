@@ -30,5 +30,35 @@ Since we are using nestJs we can actually use their inbuilt command from the ter
 ```
 This will create a folder for that module and add it to the app.modules 
 
+
+# Working with Prisma for Backend
+
+When working with PostgreSQL and Prisma, the core operations revolve around the schema.prisma file. This file, located within the Prisma configuration, allows you to define data models, which correspond to tables in your database. For instance, the User model could be defined to hold user-related attributes:
+
+```bash
+model User {
+  id    Int     @id @default(autoincrement())
+  name  String
+  email String  @unique
+  // Additional fields can be added as required.
+}
+```
+After defining or updating your data models, Prisma provides a streamlined process to synchronize these changes with your actual database:
+
+Migrating Changes to the Database:
+Execute the following command to push your schema changes to the database and also generate TypeScript types for the defined models, ensuring type safety:
+
+```bash
+npx prisma migrate dev
+```
+
+Inspecting the Database with Prisma Studio:
+Prisma Studio offers an interactive web-based interface to visualize and manage your database content. Launch it with:
+```bash
+npx prisma studio
+```
+
+This will open a browser window presenting a user-friendly interface for your database, allowing you to perform CRUD operations and more.
+
  
   
