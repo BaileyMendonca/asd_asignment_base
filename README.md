@@ -21,5 +21,14 @@ How To Run Backend
       ```bash
       npn run start
 *Note: If you go into the backend folder there is also a preconfigured readme from nest to give you some context of their framework*
+
+
+# Creating New Backend Folders
+Since we are using nestJs we can actually use their inbuilt command from the terminal in the backend folder
+  ```bash
+  nest g module NAME
+```
+This will create a folder for that module and add it to the app.modules 
+
  
   
