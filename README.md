@@ -19,7 +19,7 @@ How To Run Backend
     cd backend/
   - Run the npm command to start the backend locally
       ```bash
-      npn run start
+      npn run start:dev
 *Note: If you go into the backend folder there is also a preconfigured readme from nest to give you some context of their framework*
 
 
