@@ -20,12 +20,9 @@ export class AuthService {
     const isPasswordValid = await argon.verify(user.password, dto.password);
     if (!user) {
       this.logger.error('User not found', dto.email);
-
-      if (!isPasswordValid) {
-        this.logger.error('invalid password', dto.email);
-      }
+    } else if (!isPasswordValid) {
+      this.logger.error('Invalid password', dto.email);
     } else {
-      // return the users email, first name, last name, and role
       return {
         email: user.email,
         firstName: user.firstName,
