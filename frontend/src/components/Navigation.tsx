@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState, MouseEvent } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box } from "@mui/material";
 
 const Navigation: React.FC = () => {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   // Extract the roles from the user's profile
   const userRoles = isAuthenticated
@@ -18,16 +20,24 @@ const Navigation: React.FC = () => {
   const profileImg =
     isAuthenticated && user?.picture ? user.picture : "/defaultProfilePic.jpg";
 
+  const handleProfileClick = (event: MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <AppBar position="sticky" color="primary">
       <Toolbar>
-        {/* Left Side - Profile Picture */}
         {isAuthenticated && (
           <>
             <IconButton
               edge="start"
               color="inherit"
               aria-label="profile-picture"
+              onClick={handleProfileClick}
             >
               <img
                 src={profileImg}
@@ -35,23 +45,30 @@ const Navigation: React.FC = () => {
                 style={{ width: "40px", borderRadius: "50%" }}
               />
             </IconButton>
-            <Box>Test</Box>
+
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleProfileClose}
+            >
+              {userRoles.includes("Customer") && (
+                <MenuItem onClick={handleProfileClose}>
+                  Check my appointments
+                </MenuItem>
+              )}
+              {(userRoles.includes("Technician") ||
+                userRoles.includes("Manager")) && (
+                <MenuItem onClick={handleProfileClose}>Staff View</MenuItem>
+              )}
+              {userRoles.includes("Manager") && (
+                <MenuItem onClick={handleProfileClose}>Manager View</MenuItem>
+              )}
+            </Menu>
           </>
         )}
         <div style={{ flexGrow: 1 }}></div>{" "}
         {/* Spacer to push items to the right */}
-        {/* Buttons based on roles */}
-        {userRoles.includes("Customer") && (
-          <Button color="inherit">Check out our services</Button>
-        )}
-        {(userRoles.includes("Technician") ||
-          userRoles.includes("Manager")) && (
-          <Button color="inherit">Staff View</Button>
-        )}
-        {userRoles.includes("Manager") && (
-          <Button color="inherit">Manager View</Button>
-        )}
-        {/* Right Side - Login or Logout Button */}
+        <Button color="inherit">Check out our services</Button>
         {isAuthenticated ? (
           <Button
             color="inherit"
