@@ -16,13 +16,15 @@ const Navigation: React.FC = () => {
     <AppBar position="sticky" color="primary">
       <Toolbar>
         {/* Left Side - Profile Picture */}
-        <IconButton edge="start" color="inherit" aria-label="profile-picture">
-          <img
-            src={profileImg}
-            alt="Profile"
-            style={{ width: "40px", borderRadius: "50%" }}
-          />
-        </IconButton>
+        {isAuthenticated && (
+          <IconButton edge="start" color="inherit" aria-label="profile-picture">
+            <img
+              src={profileImg}
+              alt="Profile"
+              style={{ width: "40px", borderRadius: "50%" }}
+            />
+          </IconButton>
+        )}
         <div style={{ flexGrow: 1 }}></div>{" "}
         {/* Spacer to push items to the right */}
         {/* Right Side - Login or Logout Button */}
