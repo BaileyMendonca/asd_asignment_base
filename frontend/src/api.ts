@@ -29,7 +29,7 @@ export const signup = async (data: SignupData) => {
 type loginData = {
   email: string;
   password: string;
-  };
+};
 
 export const login = async (data: loginData) => {
   try {
