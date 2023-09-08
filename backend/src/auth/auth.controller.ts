@@ -9,14 +9,4 @@ export class AuthController {
   constructor(private authService: AuthService) {}
   private readonly logger = new Logger(AuthService.name);
 
-  @Post('login')
-  login(@Body() dto: LoginDto) {
-    return this.authService.login(dto);
-  }
-
-  @Post('signup')
-  signup(@Body() dto: AuthDto) {
-    console.log(dto);
-    return this.authService.signup(dto);
-  }
 }
