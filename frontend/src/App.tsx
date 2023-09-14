@@ -5,14 +5,38 @@ import { Box, Button, TextField } from "@mui/material";
 import { login } from "./api";
 import { useAuth0 } from "@auth0/auth0-react";
 import AppNav from "./components/AppNav";
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+
+import  TechnicianCRUD  from "./TechnicianCRUD";
+
+
+// function App() {
+//   const { user, loginWithRedirect } = useAuth0();
+//   return (
+//     <div className="App">
+//       <AppNav />
+//     </div>
+//   );
+// }
 
 function App() {
-  const { user, loginWithRedirect } = useAuth0();
   return (
+    <Router>
     <div className="App">
-      <AppNav />
+        <AppNav />
+        {/* Add a Link to navigate to the CRUD page */}
+        <Link to="/technician-crud">Go to Technician CRUD</Link>
+        
+        {/* Define your routes using the Routes component */}
+        <Routes>
+            <Route path="/technician-crud" element={<TechnicianCRUD />} />
+        </Routes>
     </div>
+</Router>
+
   );
 }
+
+
 
 export default App;

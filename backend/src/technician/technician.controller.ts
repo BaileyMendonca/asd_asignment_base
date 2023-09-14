@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
-import { TechnicianService } from '../servicies/technicianService'
+import { TechnicianService } from './technicianService'
 import { Technician, Prisma } from '@prisma/client';
 
 @Controller('technicians')
