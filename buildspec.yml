@@ -3,13 +3,13 @@ version: 0.2
 phases:
   install:
     commands:
-      - cd frontend && npm install
+      - cd frontend ; npm install
   pre_build:
     commands:
-      - cd frontend && echo "Pre-build steps"
+      - echo "Pre-build steps"
   build:
     commands:
-      - cd frontend && npm run build
+      - cd frontend ; npm run build
 artifacts:
   files:
     - '**/*'
