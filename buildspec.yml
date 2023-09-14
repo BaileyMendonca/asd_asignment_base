@@ -9,6 +9,7 @@ phases:
       - echo "Pre-build steps"
   build:
     commands:
+      - cd
       - cd frontend ; npm run build
 artifacts:
   files:
