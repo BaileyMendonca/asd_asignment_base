@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - cd backend  # Change to the backend directory
+      - npm install  # Install Node.js dependencies
+      # Add any additional setup commands here, such as setting up Prisma or configuring environment variables.
+
+  pre_build:
+    commands:
+      # Add any pre-build commands here if needed.
+
+  build:
+    commands:
+      - npm run build  # Build your Nest.js application
+      # You might also run database migrations here if applicable.
+      # For example: prisma migrate dev
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'backend/dist'  # Adjust the directory to your build output
+
+# Add post-build phases or additional actions as needed.
