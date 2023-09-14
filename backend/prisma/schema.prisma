@@ -14,7 +14,7 @@ model Technician {
   id              Int      @id @default(autoincrement())
   firstName       String
   lastName        String
-  currentPoints   Float
+  currentPoints   Float @default(0)
   Appointments    Appointment[]  
   WorkingDays     String[]   
 }

@@ -1,13 +1,25 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
-import { TechnicianService } from './technicianService'
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  BadRequestException,
+} from '@nestjs/common';
+import { TechnicianService } from './technicianService';
 import { Technician, Prisma } from '@prisma/client';
-
 @Controller('technicians')
 export class TechnicianController {
   constructor(private readonly technicianService: TechnicianService) {}
 
   @Post()
   create(@Body() data: Prisma.TechnicianCreateInput) {
+    // if (!data.WorkingDays) {
+    //   throw new BadRequestException('Working days are required.');
+    // }
+
     return this.technicianService.create(data);
   }
 

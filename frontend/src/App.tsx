@@ -7,7 +7,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import AppNav from "./components/AppNav";
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 
-import  TechnicianCRUD  from "./TechnicianCRUD";
+import  TechnicianCRUD  from "./components/TechnicianCRUD";
 
 
 // function App() {
