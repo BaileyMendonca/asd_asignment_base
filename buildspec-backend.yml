@@ -13,7 +13,7 @@ phases:
 
   build:
     commands:
-      - cd backend ; npm run build  # Build your Nest.js application
+      - npm run build  # Build your Nest.js application
       # You might also run database migrations here if applicable.
       # For example: prisma migrate dev
 
