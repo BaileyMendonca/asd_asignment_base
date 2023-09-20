@@ -18,11 +18,22 @@ model Technician {
   Appointments    Appointment[]  
   WorkingDays     String[]   
 }
+model Service {
+  id           Int             @id @default(autoincrement()) // Auto-incremented primary key
+  name         String          // Name of the service
+  duration     Int             // Duration (probably in minutes or hours)
+  points       Float           // Points associated with the service
+  Appointments Appointment[]  // One-to-many relationship with Appointment model
+}
+
+
 
 model Appointment {
   id            Int       @id @default(autoincrement())
   technicianId  Int
   technician    Technician @relation(fields: [technicianId], references: [id])
+  serviceId Int
+  service   Service @relation(fields: [serviceId], references: [id])
 }
 
 
