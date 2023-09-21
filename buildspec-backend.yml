@@ -5,6 +5,7 @@ phases:
     commands:
       - cd backend  # Change to the backend directory
       - npm install  # Install Node.js dependencies
+      - npm install @nestjs/core
       # Add any additional setup commands here, such as setting up Prisma or configuring environment variables.
 
   pre_build:
