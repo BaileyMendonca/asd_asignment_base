@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Controller,
   Get,
@@ -17,7 +18,6 @@ export class ServiceController {
 
   @Post()
   create(@Body() data: Prisma.ServiceCreateInput) {
-    // You can add custom validations here, similar to your Technician example
     return this.serviceService.create(data);
   }
 
