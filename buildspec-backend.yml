@@ -18,6 +18,7 @@ phases:
       - cp package.json dist/package.json  # Copy package.json to the build directory
       - cp nest-cli.json dist/nest-cli.json  # Copy nest-cli.json to the build directory
       - cp tsconfig.build.json dist/tsconfig.build.json  # Copy tsconfig.build.json to the build directory
+      - cp tsconfig.json dist/tsconfig.json 
 
       # For example: prisma migrate dev
 

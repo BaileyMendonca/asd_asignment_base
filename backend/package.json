@@ -10,7 +10,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npx nest start",
     "start:testing": "node dist/main.js", 
-    "start:ebs": "node current/main.js",
+    "start:ebs": "node main.js",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node server",
