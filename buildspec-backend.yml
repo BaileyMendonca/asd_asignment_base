@@ -24,7 +24,9 @@ phases:
       - cp -r prisma dist/prisma
 
       # Generate Prisma client during the build
+      - cd prisma
       - npx prisma generate
+      - cd ..
 
 artifacts:
   files:
