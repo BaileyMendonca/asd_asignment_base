@@ -8,7 +8,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "node main.js",
+    "start": "cd prisma && sudo prisma generate && cd .. && node main.js",
     "start:testing": "node dist/main.js", 
     "start:ebs": "node main.js",
     "start:dev": "nest start --watch",
