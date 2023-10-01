@@ -10,7 +10,7 @@ phases:
 
   pre_build:
     commands:
-      # Add any pre-build commands here if needed.
+      - npm install -g prisma # Install Prisma globally
 
   build:
     commands:
@@ -20,7 +20,11 @@ phases:
       - cp tsconfig.build.json dist/tsconfig.build.json  # Copy tsconfig.build.json to the build directory
       - cp tsconfig.json dist/tsconfig.json 
 
-      # For example: prisma migrate dev
+      # Copy the entire prisma folder to the build directory
+      - cp -r prisma dist/prisma
+
+      # Generate Prisma client during the build
+      - npx prisma generate
 
 artifacts:
   files:
