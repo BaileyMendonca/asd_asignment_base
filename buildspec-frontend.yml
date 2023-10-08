@@ -8,7 +8,10 @@ phases:
     commands:
       - echo "Pre-build steps"
       - echo "Running tests..."
-      - CI=true npm test
+      - $env:CI = "true"
+      - npm test
+
+
   build:
     commands:
       - npm run build
