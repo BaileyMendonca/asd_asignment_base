@@ -6,7 +6,7 @@ phases:
       - cd frontend
       - echo "Installing dependencies..."
       - npm install
-  build:
+  testing:
     commands:
       - echo "Running tests..."
-      - npm test
+      - CI=true npm test
