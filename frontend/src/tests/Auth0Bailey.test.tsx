@@ -111,7 +111,7 @@ describe("Bailey Auth0 Tests", () => {
     (useAuth0 as jest.Mock).mockReturnValue({
       isAuthenticated: true,
       user: {
-        "https://your-namespace/roles": ["Customer"],
+        "https://your-namespace/roles": ["Customer", "Technician", "Manager"],
       },
     });
 
