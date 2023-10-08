@@ -9,7 +9,7 @@ phases:
       - echo "Pre-build steps"
       - echo "Running tests..."
       - $env:CI = "true"
-      - npm test
+      - npm test -- --watchAll=false 
 
 
   build:
