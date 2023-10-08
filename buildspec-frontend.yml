@@ -7,8 +7,6 @@ phases:
   pre_build:
     commands:
       - echo "Pre-build steps"
-  test: 
-    commands:
       - echo "Running tests..."
       - CI=true npm test
   build:
