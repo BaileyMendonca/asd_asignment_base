@@ -11,8 +11,18 @@ datasource db {
 }
 
 model Technician {
-  id        Int    @id @default(autoincrement())
-  email     String @unique
-  firstName String
-  lastName  String
+  id              Int      @id @default(autoincrement())
+  firstName       String
+  lastName        String
+  currentPoints   Float
+  Appointments    Appointment[]  
+  WorkingDays     String[]   
 }
+
+model Appointment {
+  id            Int       @id @default(autoincrement())
+  technicianId  Int
+  technician    Technician @relation(fields: [technicianId], references: [id])
+}
+
+
