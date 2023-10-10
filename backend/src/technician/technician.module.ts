@@ -7,3 +7,4 @@ import { TechnicianController } from './technician.controller';
   providers: [PrismaService, TechnicianService],
 })
 export class TechnicianModule {}
+

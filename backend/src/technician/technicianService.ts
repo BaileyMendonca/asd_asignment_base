@@ -7,7 +7,6 @@ export class TechnicianService {
   constructor(private readonly prisma: PrismaService) {}
 
   create(data: Prisma.TechnicianCreateInput): Promise<Technician> {
-    // Ensure currentPoints is set to default if not provided
     const preparedData = {
       ...data,
       currentPoints: data.currentPoints ?? 0
