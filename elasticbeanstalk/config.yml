@@ -1,0 +1,5 @@
+branch-defaults: 
+  default: 
+    environment: BackendASD-env
+  deploy: 
+    artifact: backend.zip
