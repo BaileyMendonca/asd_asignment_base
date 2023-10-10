@@ -14,15 +14,32 @@ model Technician {
   id              Int      @id @default(autoincrement())
   firstName       String
   lastName        String
-  currentPoints   Float
+  currentPoints   Float @default(0)
   Appointments    Appointment[]  
   WorkingDays     String[]   
 }
+model Service {
+  id           Int             @id @default(autoincrement()) // Auto-incremented primary key
+  name         String          // Name of the service
+  duration     Int             // Duration (probably in minutes or hours)
+  points       Float           // Points associated with the service
+  Appointments Appointment[]  // One-to-many relationship with Appointment model
+}
+
+
 
 model Appointment {
-  id            Int       @id @default(autoincrement())
-  technicianId  Int
-  technician    Technician @relation(fields: [technicianId], references: [id])
+  AppointmentID  Int         @id @default(autoincrement()) // Auto-incremented primary key   
+  Time           DateTime    // Time of the appointment
+  LockerNumber   Int         // Locker number associated with the appointment
+  ServiceID      Int         // ID of the service booked
+  TechnicianID   Int?        // ID of the technician assigned (null if not yet distributed)
+  IsRequested    Boolean     // Whether the appointment was a special request for a specific technician
+  Date           DateTime    // Date of the appointment
+  Service        Service     @relation(fields: [ServiceID], references: [id]) // Relation to the Service model
+  Technician     Technician? @relation(fields: [TechnicianID], references: [id]) // Relation to the Technician model
 }
+
+
 
 
