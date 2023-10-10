@@ -1,0 +1,36 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - cd backend  # Change to the backend directory
+      - npm install  # Install Node.js dependencies
+      - npm install @nestjs/core
+      # Add any additional setup commands here, such as setting up Prisma or configuring environment variables.
+
+  pre_build:
+    commands:
+      - npm install -g prisma # Install Prisma globally
+
+  build:
+    commands:
+      - npm run build  # Build your Nest.js application
+      - cp package.json dist/package.json  # Copy package.json to the build directory
+      - cp nest-cli.json dist/nest-cli.json  # Copy nest-cli.json to the build directory
+      - cp tsconfig.build.json dist/tsconfig.build.json  # Copy tsconfig.build.json to the build directory
+      - cp tsconfig.json dist/tsconfig.json 
+
+      # Copy the entire prisma folder to the build directory
+      - cp -r prisma dist/prisma
+
+      # Generate Prisma client during the build
+      - cd prisma
+      - npx prisma generate
+      - cd ..
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'backend/dist'  # Adjust the directory to your build output
+
+# Add post-build phases or additional actions as needed.
