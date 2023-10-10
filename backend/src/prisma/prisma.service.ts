@@ -8,7 +8,7 @@ export class PrismaService extends PrismaClient {
       datasources: {
         db: {
           url:
-            process.env.DATABASE_URL ||
+            // process.env.DATABASE_URL ||
             'postgresql://ebroot:ebroot@awseb-e-n2unv8immz-stack-awsebrdsdatabase-yobdbembudcj.csul9by1mye5.us-east-1.rds.amazonaws.com:5432/nest?schema=public',
         },
       },
