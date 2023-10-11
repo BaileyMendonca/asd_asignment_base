@@ -27,9 +27,7 @@ const TechnicianCRUD: React.FC = () => {
   const [selectedWorkingDays, setSelectedWorkingDays] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
-
-  const apiURL =
-    "https://ebsbackend-env.eba-8pkqsxsg.us-east-1.elasticbeanstalk.com";
+  const apiURL = "https://41026asdspa.com";
 
   // const apiURL = "http://localhost:4000";
   useEffect(() => {

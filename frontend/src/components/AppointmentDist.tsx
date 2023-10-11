@@ -58,8 +58,7 @@ const AppointmentDist: React.FC = () => {
 
   const [isDistributed, setIsDistributed] = useState<boolean>(false);
 
-  const apiURL =
-    "https://ebsbackend-env.eba-8pkqsxsg.us-east-1.elasticbeanstalk.com";
+  const apiURL = "https://41026asdspa.com";
 
   // const apiURL = "http://localhost:4000";
 
