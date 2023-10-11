@@ -9,7 +9,7 @@ export class PrismaService extends PrismaClient {
         db: {
           url:
             // process.env.DATABASE_URL ||
-            'DATABASE_URL=postgresql://ebroot:ASDisfun@awseb-e-n2unv8immz-stack-awsebrdsdatabase-yobdbembudcj.csul9by1mye5.us-east-1.rds.amazonaws.com:5432/ebdb',
+            'postgresql://ebroot:ASDisfun@awseb-e-n2unv8immz-stack-awsebrdsdatabase-yobdbembudcj.csul9by1mye5.us-east-1.rds.amazonaws.com:5432/ebdb',
         },
       },
     });
