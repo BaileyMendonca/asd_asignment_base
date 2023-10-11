@@ -27,7 +27,7 @@ phases:
       - cd prisma
       - npx prisma generate
       - cd ..
-      - npx prisma migrate dev
+      # - npx prisma migrate dev
 
 artifacts:
   files:
