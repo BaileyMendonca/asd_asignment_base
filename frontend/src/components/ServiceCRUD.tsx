@@ -25,7 +25,7 @@ const ServiceCRUD: React.FC = () => {
   }, []);
 
   const apiURL =
-    "http://ebsbackend-env.eba-8pkqsxsg.us-east-1.elasticbeanstalk.com";
+    "https://ebsbackend-env.eba-8pkqsxsg.us-east-1.elasticbeanstalk.com";
 
   // const apiURL = "http://localhost:4000";
 
