@@ -7,7 +7,7 @@ async function bootstrap() {
   const port = process.env.PORT || 4000;
   // Enable CORS and specify the frontend's origin
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'https://dga7h7mv9o76z.cloudfront.net'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true, // allows the browser to send cookies or authentication info
   });
