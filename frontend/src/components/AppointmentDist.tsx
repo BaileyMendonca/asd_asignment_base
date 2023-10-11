@@ -14,7 +14,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Checkbox, FormControlLabel } from "@mui/material";
 
-
 interface Technician {
   id: number;
   firstName: string;
@@ -39,7 +38,6 @@ interface Appointment {
   Date: string;
 }
 
-
 const AppointmentDist: React.FC = () => {
   const [technicians, setTechnicians] = useState<Technician[]>([]);
   const [services, setServices] = useState<Service[]>([]);
@@ -51,26 +49,36 @@ const AppointmentDist: React.FC = () => {
   const [lockerNumber, setLockerNumber] = useState<number>(0);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [isRequested, setIsRequested] = useState(false);
-  const [recentlyDistributed, setRecentlyDistributed] = useState<Appointment[]>(() => {
-    const savedData = localStorage.getItem('recentlyDistributed');
-    return savedData ? JSON.parse(savedData) : [];
-  });
-  
+  const [recentlyDistributed, setRecentlyDistributed] = useState<Appointment[]>(
+    () => {
+      const savedData = localStorage.getItem("recentlyDistributed");
+      return savedData ? JSON.parse(savedData) : [];
+    }
+  );
+
   const [isDistributed, setIsDistributed] = useState<boolean>(false);
 
+  const apiURL =
+    "http://ebsbackend-env.eba-8pkqsxsg.us-east-1.elasticbeanstalk.com";
+
+  // const apiURL = "http://localhost:4000";
+
   useEffect(() => {
-    localStorage.setItem('recentlyDistributed', JSON.stringify(recentlyDistributed));
+    localStorage.setItem(
+      "recentlyDistributed",
+      JSON.stringify(recentlyDistributed)
+    );
   }, [recentlyDistributed]);
 
-  useEffect(()=>{
-    localStorage.setItem('isDistributed',JSON.stringify(isDistributed));
-  },[isDistributed]);
   useEffect(() => {
-    fetch("http://localhost:4000/technicians")
+    localStorage.setItem("isDistributed", JSON.stringify(isDistributed));
+  }, [isDistributed]);
+  useEffect(() => {
+    fetch(`${apiURL}/technicians`)
       .then((response) => response.json())
       .then((data) => setTechnicians(data));
 
-    fetch("http://localhost:4000/services")
+    fetch(`${apiURL}/services`)
       .then((response) => response.json())
       .then((data) => setServices(data));
   }, []);
@@ -110,7 +118,7 @@ const AppointmentDist: React.FC = () => {
 
   const handleDistribute = () => {
     setRecentlyDistributed([]);
-    localStorage.removeItem('recentlyDistributed');
+    localStorage.removeItem("recentlyDistributed");
     appointments.forEach((appointment) => {
       // Extract the date part from the appointment.date
       const datePart = appointment.Date.split("T")[0];
@@ -134,7 +142,7 @@ const AppointmentDist: React.FC = () => {
         const isoString = new Date(dateTimeString).toISOString();
         setIsDistributed(true);
 
-        fetch("http://localhost:4000/appointments", {
+        fetch(`${apiURL}/appointments`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -148,11 +156,10 @@ const AppointmentDist: React.FC = () => {
 
           .then((data) => {
             console.log("Success:", data);
-setRecentlyDistributed((prev) => [
-    ...prev,
-    { ...appointment, AppointmentID: data.AppointmentID },
-]);
-
+            setRecentlyDistributed((prev) => [
+              ...prev,
+              { ...appointment, AppointmentID: data.AppointmentID },
+            ]);
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -183,7 +190,7 @@ setRecentlyDistributed((prev) => [
   const handleRedoAll = () => {
     // Delete all recently distributed appointments from the backend
     const deletePromises = recentlyDistributed.map((appointment) =>
-      fetch(`http://localhost:4000/appointments/${appointment.AppointmentID}`, {
+      fetch(`${apiURL}/appointments/${appointment.AppointmentID}`, {
         method: "DELETE",
       })
     );
@@ -202,20 +209,15 @@ setRecentlyDistributed((prev) => [
   };
   const handleStartNewDay = () => {
     setRecentlyDistributed([]);
-    localStorage.removeItem('recentlyDistributed');
+    localStorage.removeItem("recentlyDistributed");
   };
-  
 
   return (
     <div>
       <h2>Appointment</h2>
-      <Button
-  variant="contained"
-  color="primary"
-  onClick={handleStartNewDay}
->
-  Start New Day
-</Button>
+      <Button variant="contained" color="primary" onClick={handleStartNewDay}>
+        Start New Day
+      </Button>
 
       <Grid container spacing={2}>
         <Grid item xs={2}>
@@ -349,21 +351,15 @@ setRecentlyDistributed((prev) => [
                   appointment.LockerNumber
                 }`}
               />
-              
             </ListItem>
           ))}
         </List>
         {recentlyDistributed.length > 0 && (
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleRedoAll}
-                >
-                  Redo All
-                </Button>
-              )}
+          <Button variant="contained" color="secondary" onClick={handleRedoAll}>
+            Redo All
+          </Button>
+        )}
       </Grid>
-
     </div>
   );
 };

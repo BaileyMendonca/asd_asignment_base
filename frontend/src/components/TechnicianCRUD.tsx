@@ -27,20 +27,25 @@ const TechnicianCRUD: React.FC = () => {
   const [selectedWorkingDays, setSelectedWorkingDays] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
+
+  const apiURL =
+    "http://ebsbackend-env.eba-8pkqsxsg.us-east-1.elasticbeanstalk.com";
+
+  // const apiURL = "http://localhost:4000";
   useEffect(() => {
     fetchTechnicians();
   }, []);
 
   const fetchTechnicians = async () => {
-    const response = await fetch("http://localhost:4000/technicians");
+    const response = await fetch(`${apiURL}/technicians`);
     const data: Technician[] = await response.json();
     setTechnicians(data);
   };
 
   const handleCreateOrUpdate = async () => {
     const url = selectedId
-      ? `http://localhost:4000/technicians/${selectedId}`
-      : "http://localhost:4000/technicians";
+      ? `${apiURL}/technicians/${selectedId}`
+      : `${apiURL}/technicians`;
     const method = selectedId ? "PUT" : "POST";
 
     const payload = {
@@ -74,7 +79,7 @@ const TechnicianCRUD: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    const response = await fetch(`http://localhost:4000/technicians/${id}`, {
+    const response = await fetch(`${apiURL}/technicians/${id}`, {
       method: "DELETE",
     });
 

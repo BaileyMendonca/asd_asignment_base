@@ -24,9 +24,14 @@ const ServiceCRUD: React.FC = () => {
     fetchServices();
   }, []);
 
+  const apiURL =
+    "http://ebsbackend-env.eba-8pkqsxsg.us-east-1.elasticbeanstalk.com";
+
+  // const apiURL = "http://localhost:4000";
+
   const fetchServices = async () => {
     try {
-      const response = await fetch("http://localhost:4000/services");
+      const response = await fetch(`${apiURL}/services`);
       const data = await response.json();
       console.log("Fetched services:", data);
       setServices(data);
@@ -49,8 +54,8 @@ const ServiceCRUD: React.FC = () => {
   const handleSubmit = async () => {
     try {
       const url = selectedId
-        ? `http://localhost:4000/services/${selectedId}`
-        : "http://localhost:4000/services";
+        ? `${apiURL}/services/${selectedId}`
+        : `${apiURL}/services`;
       const method = selectedId ? "PUT" : "POST";
 
       const payload = {
@@ -87,7 +92,7 @@ const ServiceCRUD: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     try {
-      await fetch(`http://localhost:4000/services/${id}`, {
+      await fetch(`${apiURL}/services/${id}`, {
         method: "DELETE",
       });
 

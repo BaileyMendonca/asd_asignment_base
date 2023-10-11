@@ -25,6 +25,11 @@ interface Service {
   points: number;
 }
 
+const apiURL =
+  "http://ebsbackend-env.eba-8pkqsxsg.us-east-1.elasticbeanstalk.com";
+
+// const apiURL = "http://localhost:4000";
+
 const TurningSheet: React.FC = () => {
   const location = useLocation();
   const { recentlyDistributed } = location.state || { recentlyDistributed: [] };
@@ -76,12 +81,12 @@ const TurningSheet: React.FC = () => {
   console.log(localAppointments);
 
   useEffect(() => {
-    fetch("http://localhost:4000/technicians")
+    fetch(`${apiURL}/technicians`)
       .then((response) => response.json())
       .then((data) => {
         setTechnicians(data);
         data.forEach((tech: Technician) => {
-          fetch(`http://localhost:4000/technicians/${tech.id}`, {
+          fetch(`${apiURL}/technicians/${tech.id}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -93,7 +98,7 @@ const TurningSheet: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:4000/services")
+    fetch(`${apiURL}/services`)
       .then((response) => response.json())
       .then((data) => {
         setServices(data);
