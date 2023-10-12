@@ -31,7 +31,7 @@ const apiURL = "https://41026asdspa.com";
 
 const TurningSheet: React.FC = () => {
   const location = useLocation();
-  const { recentlyDistributed } = location.state || { recentlyDistributed: [] };
+  const recentlyDistributed = location?.state?.recentlyDistributed || [];
   const [technicians, setTechnicians] = useState<Technician[]>([]);
   const storedAppointments = JSON.parse(
     localStorage.getItem("localAppointments") || "[]"
