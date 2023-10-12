@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import { useAuth0 } from "@auth0/auth0-react";
 import Navigation from "../components/Navigation";
+import { BrowserRouter } from "react-router-dom";
 
 //Initalise a mock version of auth0
 jest.mock("@auth0/auth0-react");
@@ -16,7 +17,11 @@ describe("Bailey Auth0 Tests", () => {
       isAuthenticated: false,
     });
     // Tell what componenets to render
-    render(<Navigation />);
+    render(
+      <BrowserRouter>
+        <Navigation />
+      </BrowserRouter>
+    );
     // Tell what to expect
     expect(screen.getByText("Log In")).toBeInTheDocument();
   });
@@ -30,7 +35,11 @@ describe("Bailey Auth0 Tests", () => {
       },
     });
 
-    render(<Navigation />);
+    render(
+      <BrowserRouter>
+        <Navigation />
+      </BrowserRouter>
+    );
     expect(screen.getByText("Log Out")).toBeInTheDocument();
   });
 
@@ -46,7 +55,11 @@ describe("Bailey Auth0 Tests", () => {
       },
     });
 
-    render(<Navigation />);
+    render(
+      <BrowserRouter>
+        <Navigation />
+      </BrowserRouter>
+    );
     fireEvent.click(screen.getByLabelText("profile-picture"));
     expect(screen.getByText("Manager View")).toBeInTheDocument();
   });
@@ -59,7 +72,11 @@ describe("Bailey Auth0 Tests", () => {
       },
     });
 
-    render(<Navigation />);
+    render(
+      <BrowserRouter>
+        <Navigation />
+      </BrowserRouter>
+    );
     fireEvent.click(screen.getByLabelText("profile-picture"));
     expect(screen.queryByText("Manager View")).not.toBeInTheDocument();
   });
@@ -72,7 +89,11 @@ describe("Bailey Auth0 Tests", () => {
       },
     });
 
-    render(<Navigation />);
+    render(
+      <BrowserRouter>
+        <Navigation />
+      </BrowserRouter>
+    );
     fireEvent.click(screen.getByLabelText("profile-picture"));
 
     expect(screen.queryByText("Manager View")).not.toBeInTheDocument();
@@ -89,7 +110,11 @@ describe("Bailey Auth0 Tests", () => {
       },
     });
 
-    render(<Navigation />);
+    render(
+      <BrowserRouter>
+        <Navigation />
+      </BrowserRouter>
+    );
     fireEvent.click(screen.getByLabelText("profile-picture"));
     expect(screen.getByText("Staff View")).toBeInTheDocument();
   });
@@ -102,7 +127,11 @@ describe("Bailey Auth0 Tests", () => {
       },
     });
 
-    render(<Navigation />);
+    render(
+      <BrowserRouter>
+        <Navigation />
+      </BrowserRouter>
+    );
     fireEvent.click(screen.getByLabelText("profile-picture"));
     expect(screen.queryByText("Staff View")).toBeInTheDocument();
   });
@@ -115,7 +144,11 @@ describe("Bailey Auth0 Tests", () => {
       },
     });
 
-    render(<Navigation />);
+    render(
+      <BrowserRouter>
+        <Navigation />
+      </BrowserRouter>
+    );
     fireEvent.click(screen.getByLabelText("profile-picture"));
 
     expect(screen.queryByText("Staff View")).not.toBeInTheDocument();
