@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Link } from "react-router-dom";
 
 const Navigation: React.FC = () => {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
@@ -58,10 +59,14 @@ const Navigation: React.FC = () => {
               )}
               {(userRoles.includes("Technician") ||
                 userRoles.includes("Manager")) && (
-                <MenuItem onClick={handleProfileClose}>Staff View</MenuItem>
+                <Link to="/staff">
+                  <MenuItem onClick={handleProfileClose}>Staff View</MenuItem>
+                </Link>
               )}
               {userRoles.includes("Manager") && (
-                <MenuItem onClick={handleProfileClose}>Manager View</MenuItem>
+                <Link to="/manager">
+                  <MenuItem onClick={handleProfileClose}>Manager View</MenuItem>
+                </Link>
               )}
             </Menu>
           </>
