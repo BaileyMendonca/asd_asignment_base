@@ -15,6 +15,10 @@ import {
 } from "../api";
 import { formatDateTime } from "./AvailabilitiesView";
 
+/* 
+Similar to the normal availability view but this will grab all pending requests indescriminate of user for manager review
+*/
+
 const AvailabilityManagementForm = () => {
   type AvailabilityData = {
     StartTime: string;
@@ -23,16 +27,15 @@ const AvailabilityManagementForm = () => {
     id: number;
   };
   const [availabilities, setAvailabilities] = useState<AvailabilityData[]>([]);
-  const [availCount, setAvailCount] = useState<number>(0);
+  // Use effect basically will run on page load and then assign the api response to the usestate
   useEffect(() => {
     getAllPendingAvailabilities().then((data: AvailabilityData[]) =>
       setAvailabilities(data)
     );
-  }, [availCount]);
+  }, []);
 
   const handleStatusChange = (id: number, status: string) => {
     handleAvailabilityStatusChange(id, status);
-    setAvailCount(availCount - 1);
   };
 
   return (
