@@ -12,6 +12,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 import { deleteAvailability, getAvailabilities } from "../api";
 
+/*
+This view basically encapulates the general view including the cards of requests and the form
+*/
+
 // Define the type for the data structure returned by getAvailabilities
 type AvailabilityData = {
   StartTime: string;
@@ -32,7 +36,7 @@ const AvailabilitiesView = () => {
     }
   }, [isAuthenticated, user?.email]);
 
-  console.log(availabilities);
+  // Ensures that the user is authenticated
   if (!isAuthenticated) {
     return (
       <Typography>Sorry, you should be logged in to see this view</Typography>
@@ -48,7 +52,7 @@ const AvailabilitiesView = () => {
       {availabilities != null &&
         availabilities.map((availability, index) => (
           <AvailabilitiesCard
-            key={index} // Make sure to provide a unique key
+            key={index} 
             StartTime={availability.StartTime}
             EndTime={availability.EndTime}
             status={availability.status}
@@ -64,6 +68,7 @@ const AvailabilitiesView = () => {
 
 export default AvailabilitiesView;
 
+// Date formatter so it's easy to read instead of iso
 export const formatDateTime = (isoDateTime: string) => {
   const date = new Date(isoDateTime);
   const options: Intl.DateTimeFormatOptions = {
@@ -85,6 +90,7 @@ type AvailabilitiesCardProps = {
   id: number;
 };
 
+// This is a repetable component that will be used to display each availability
 const AvailabilitiesCard = (props: AvailabilitiesCardProps) => {
   const handleDelete = async () => {
     deleteAvailability(props.id);
@@ -100,6 +106,7 @@ const AvailabilitiesCard = (props: AvailabilitiesCardProps) => {
           label={props.status}
           sx={{ mt: 2 }}
           color={
+            // This basically is assigning the colour based on the status but inline with ternary operators
             props.status === "Approved"
               ? "success"
               : props.status === "Denied"

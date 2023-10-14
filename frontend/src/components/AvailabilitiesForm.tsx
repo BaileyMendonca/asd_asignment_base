@@ -1,56 +1,59 @@
-import {
-  Button,
-  Card,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Button, Card, TextField, Typography } from "@mui/material";
 import { submitAvailability } from "../api";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const AvailabilityForm = () => {
-  const defaultStartDate = new Date();
-  defaultStartDate.setHours(0, 0, 0, 0);
-  const [count, setCount] = useState<number>(0);
-  useEffect(() => {}, [count]);
+  // Set state for the form data so we can update the form
   const [formData, setFormData] = useState({
     TechnicianID: "",
     Day: "",
-    StartTime: defaultStartDate.toISOString().slice(0, 16),
-    EndTime: defaultStartDate.toISOString().slice(0, 16),
+    StartTime: "",
+    EndTime: "",
   });
 
+  // This is just used to check if the user is authenticated before accessing the view
   const { isAuthenticated, user } = useAuth0();
+
+  // Return a polite message for the edge case of a user getting to this view without authentication
   if (!isAuthenticated) {
     return (
-      <Typography>Sorry you should be logged in to see this view</Typography>
+      <Typography>Sorry, you should be logged in to see this view</Typography>
     );
   }
 
+  // Handles the form data change to keep the dom up to date, along with visual error representation for the user
   const handleChange = (e: any) => {
+    const { name, value } = e.target;
+
+    if (name === "EndTime" && new Date(value) < new Date(formData.StartTime)) {
+      window.alert("Please select an End Time passed the Start Time.");
+      return;
+    }
+
+    // Set the form data with the current fields
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
-    setCount(count + 1);
   };
 
+  // This handle the actual submission of the form
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
+    // We use a try here in order to manage error handling
     try {
       await submitAvailability({
+        // Get the email from the users account
         email: user!.email!,
         StartTime: new Date(formData.StartTime).toISOString(),
         EndTime: new Date(formData.EndTime).toISOString(),
+        //Always submitted as pending
         status: "Pending",
       });
-      console.log("Availability submitted successfully:");
     } catch (error) {
+      // Error handling in the logs for internal use
       console.error("Error submitting availability:", error);
     }
   };
@@ -84,7 +87,7 @@ const AvailabilityForm = () => {
           value={formData.EndTime}
           onChange={handleChange}
           InputLabelProps={{
-            shrink: true, // This prevents overlap when not selected
+            shrink: true,
           }}
         />
 
