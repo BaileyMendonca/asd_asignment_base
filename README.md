@@ -71,4 +71,38 @@ npx prisma studio
 This will open a browser window presenting a user-friendly interface for your database, allowing you to perform CRUD operations and more.
 
  
+
+
+# For Marker to read 
+
   
+We have a mono repoed project with both a backend and a frontend.
+
+Frontend
+
+In the frontend we use simple react typescript and the important files are all located in the component folders. The following is folder ownership
+
+Bailey: AvailabilityForm, AvailabilityView, AvailabilityManagementForm, Navigation, TechnicianView, ManagerViewer
+Taeyeong  Kim: AppointmentDist, appointmentCRUD, Technician CRUD, 
+
+
+
+
+Hyeeun Kim :serviceCRUD, turninghseet
+
+Tests
+Taeyeong Kim : AppointmentCreation.test.tsx
+Hyeeun Kim : TechnicianCRUD.test.tsx
+Bailey: Auth0Bailey.test.tsx
+
+Backend
+In the backend we use a nestjs approach and including controller,module,service. Controller is purely for handling the api calls and then calling the given service to action them. Each feature will have it’s own folder which contains needed files. Below is folder ownership
+
+Bailey: Availabilities folder
+
+Taeyeong Kim :appointmentCRUD, Technician CRUD, 
+
+Hyeeun Kim ::serviceCRUD,
+
+
+
