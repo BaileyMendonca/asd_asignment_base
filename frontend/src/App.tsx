@@ -4,7 +4,13 @@ import "./App.css";
 import { Box, Button, TextField } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 import AppNav from "./components/AppNav";
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Routes,
+  HashRouter,
+} from "react-router-dom";
 
 import TechnicianCRUD from "./components/TechnicianCRUD";
 import ServiceCRUD from "./components/ServiceCRUD";
@@ -12,6 +18,7 @@ import AppointmentDist from "./components/AppointmentDist";
 import TurningSheet from "./components/TurningSheet";
 import TechnicianView from "./components/TechnicianView";
 import ManagerView from "./components/ManagerView";
+import ServicesView from "./components/ServicesView";
 
 // function App() {
 //   const { user, loginWithRedirect } = useAuth0();
@@ -24,7 +31,7 @@ import ManagerView from "./components/ManagerView";
 
 function App() {
   return (
-    <Router>
+    <HashRouter>
       <div className="App">
         <AppNav />
         {/* Add a Link to navigate to the CRUD page */}
@@ -35,6 +42,7 @@ function App() {
 
         {/* Define your routes using the Routes component */}
         <Routes>
+          <Route path="/services" element={<ServicesView />} />
           <Route path="/manager" element={<ManagerView />} />
           <Route path="/staff" element={<TechnicianView />} />
           <Route path="/technician-crud" element={<TechnicianCRUD />} />
@@ -43,7 +51,7 @@ function App() {
           <Route path="/turning-sheet" element={<TurningSheet />} />
         </Routes>
       </div>
-    </Router>
+    </HashRouter>
   );
 }
 
