@@ -77,7 +77,12 @@ const Navigation: React.FC = () => {
         )}
         <div style={{ flexGrow: 1 }}></div>{" "}
         {/* Spacer to push items to the right */}
-        <Button color="inherit">Check out our services</Button>
+        <Button
+          color="inherit"
+          onClick={() => handleMenuItemClick("/services")}
+        >
+          Check out our services
+        </Button>
         {isAuthenticated ? (
           <Button
             color="inherit"
