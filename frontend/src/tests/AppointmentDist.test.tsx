@@ -2,9 +2,9 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import AppointmentDist from "../components/AppointmentDist";
+import { BrowserRouter } from "react-router-dom";
 
 // Mocking the fetch function to avoid actual API calls
-
 
 describe("<AppointmentDist />", () => {
   beforeEach(() => {
@@ -13,13 +13,23 @@ describe("<AppointmentDist />", () => {
   });
 
   test("renders the component without crashing", () => {
-    render(<AppointmentDist />);
-    const headerElement = screen.getByText(/Recently Distributed Appointments/i);
+    render(
+      <BrowserRouter>
+        <AppointmentDist />
+      </BrowserRouter>
+    );
+    const headerElement = screen.getByText(
+      /Recently Distributed Appointments/i
+    );
     expect(headerElement).toBeInTheDocument();
   });
 
   test("shows error when trying to add an appointment without selecting a service", () => {
-    render(<AppointmentDist />);
+    render(
+      <BrowserRouter>
+        <AppointmentDist />
+      </BrowserRouter>
+    );
 
     const addButton = screen.getByText("Add Appointment");
     fireEvent.click(addButton);
@@ -31,7 +41,11 @@ describe("<AppointmentDist />", () => {
   });
 
   test("shows error when trying to add an appointment with request checked but without selecting a technician", () => {
-    render(<AppointmentDist />);
+    render(
+      <BrowserRouter>
+        <AppointmentDist />
+      </BrowserRouter>
+    );
 
     // Check the request checkbox
     const requestCheckbox = screen.getByLabelText("Requested");
