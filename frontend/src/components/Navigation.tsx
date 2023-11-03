@@ -64,7 +64,7 @@ const Navigation: React.FC = () => {
               {(userRoles.includes("Technician") ||
                 userRoles.includes("Manager")) && (
                 <MenuItem onClick={() => handleMenuItemClick("/staff")}>
-                  Staff View TAB
+                  Staff View
                 </MenuItem>
               )}
               {userRoles.includes("Manager") && (

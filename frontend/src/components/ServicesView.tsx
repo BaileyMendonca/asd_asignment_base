@@ -20,7 +20,7 @@ const ServicesView = () => {
       image: acupunture,
     },
     {
-      name: "Facial",
+      name: "Facial CHANGED FOR DEPLOYMENT",
       price: 60,
       image: facial,
     },
