@@ -13,6 +13,9 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Checkbox, FormControlLabel } from "@mui/material";
+// Define interfaces for types.
+import { Box, Tabs, Tab } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 interface Technician {
   id: number;
@@ -39,6 +42,16 @@ interface Appointment {
 }
 
 const AppointmentDist: React.FC = () => {
+  const navigate = useNavigate();
+
+  const getTabValue = () => {
+    const pathSegments = window.location.hash.replace("#/", "").split("/");
+    return pathSegments[pathSegments.length - 1] || "technician-crud";
+  };
+
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: string) => {
+    navigate(`/${newValue}`);
+  };
   const [technicians, setTechnicians] = useState<Technician[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedTechnician, setSelectedTechnician] = useState<number | null>(
@@ -50,6 +63,8 @@ const AppointmentDist: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [isRequested, setIsRequested] = useState(false);
   const [recentlyDistributed, setRecentlyDistributed] = useState<Appointment[]>(
+    // Retrieve recently distributed appointments from local storage.
+
     () => {
       const savedData = localStorage.getItem("recentlyDistributed");
       return savedData ? JSON.parse(savedData) : [];
@@ -84,6 +99,7 @@ const AppointmentDist: React.FC = () => {
 
   console.log(recentlyDistributed);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // Function to add a new appointment.
 
   const handleAddAppointment = () => {
     if (isRequested && selectedTechnician === null) {
@@ -114,6 +130,7 @@ const AppointmentDist: React.FC = () => {
     setAppointments([...appointments, appointment]);
     setErrorMessage(null); // Clear any previous error message
   };
+  // Function to distribute appointments.
 
   const handleDistribute = () => {
     setRecentlyDistributed([]);
@@ -173,6 +190,7 @@ const AppointmentDist: React.FC = () => {
     });
     setAppointments([]);
   };
+  // Function to edit an existing appointment.
 
   const handleEditAppointment = (index: number) => {
     const appointment = appointments[index];
@@ -182,10 +200,13 @@ const AppointmentDist: React.FC = () => {
     setLockerNumber(appointment.LockerNumber);
     handleDeleteAppointment(index);
   };
+  // Function to delete an appointment.
 
   const handleDeleteAppointment = (index: number) => {
     setAppointments(appointments.filter((_, i) => i !== index));
   };
+  // Function to revert all distributions.
+
   const handleRedoAll = () => {
     // Delete all recently distributed appointments from the backend
     const deletePromises = recentlyDistributed.map((appointment) =>
@@ -213,12 +234,32 @@ const AppointmentDist: React.FC = () => {
 
   return (
     <div>
+      <Box sx={{ width: "100%" }}>
+        <Tabs
+          value={getTabValue()}
+          onChange={handleTabChange}
+          aria-label="navigation tabs"
+          variant="scrollable"
+          scrollButtons="auto"
+        >
+          <Tab label="Search" value="" />
+          <Tab label="Technician Management" value="technician-crud" />
+          <Tab label="Service Management" value="service-crud" />
+          <Tab label="Appointment Distribution" value="appointment-dist" />
+          <Tab label="Turning Sheet" value="turning-sheet" />
+        </Tabs>
+      </Box>
+
+      {/* Heading for the page */}
       <h2>Appointment</h2>
+      {/* Button to reset and start a new day */}
       <Button variant="contained" color="primary" onClick={handleStartNewDay}>
         Start New Day
       </Button>
 
+      {/* Form for appointment details */}
       <Grid container spacing={2}>
+        {/* Checkbox for user to specify if the technician is requested */}
         <Grid item xs={2}>
           <FormControlLabel
             control={
@@ -230,16 +271,19 @@ const AppointmentDist: React.FC = () => {
             label="Requested"
           />
         </Grid>
+
+        {/* Dropdown to select a Technician */}
         <Grid item xs={2}>
           Technician
           <Select
             value={selectedTechnician}
             onChange={(e) => setSelectedTechnician(Number(e.target.value))}
           >
+            {/* If no technician is requested, show 'None' option */}
             {!isRequested && <MenuItem value="">None</MenuItem>}
+            {/* Show available technicians for today */}
             {technicians
               .filter((technician) => {
-                // Get today's day in long format (e.g., 'Monday', 'Tuesday', etc.)
                 const today = new Date().toLocaleString("en-US", {
                   weekday: "long",
                 });
@@ -253,6 +297,7 @@ const AppointmentDist: React.FC = () => {
           </Select>
         </Grid>
 
+        {/* Dropdown to select a Service */}
         <Grid item xs={2}>
           Service
           <Select
@@ -266,6 +311,8 @@ const AppointmentDist: React.FC = () => {
             ))}
           </Select>
         </Grid>
+
+        {/* Time input for appointment */}
         <Grid item xs={2}>
           Time
           <TextField
@@ -274,6 +321,8 @@ const AppointmentDist: React.FC = () => {
             onChange={(e) => setTime(e.target.value)}
           />
         </Grid>
+
+        {/* Locker number input for appointment */}
         <Grid item xs={2}>
           Locker Number
           <TextField
@@ -282,6 +331,8 @@ const AppointmentDist: React.FC = () => {
             onChange={(e) => setLockerNumber(Number(e.target.value))}
           />
         </Grid>
+
+        {/* Button to add the appointment to the list */}
         <Grid item xs={2}>
           <Button
             variant="contained"
@@ -292,6 +343,7 @@ const AppointmentDist: React.FC = () => {
           </Button>
         </Grid>
 
+        {/* List of appointments added */}
         <Grid item xs={12}>
           <List>
             {appointments.map((appointment, index) => (
@@ -309,9 +361,11 @@ const AppointmentDist: React.FC = () => {
                     appointment.LockerNumber
                   }`}
                 />
+                {/* Button to edit the appointment */}
                 <IconButton onClick={() => handleEditAppointment(index)}>
                   <EditIcon />
                 </IconButton>
+                {/* Button to delete the appointment */}
                 <IconButton onClick={() => handleDeleteAppointment(index)}>
                   <DeleteIcon />
                 </IconButton>
@@ -319,6 +373,8 @@ const AppointmentDist: React.FC = () => {
             ))}
           </List>
         </Grid>
+
+        {/* Button to distribute the appointments */}
         <Grid item xs={12} container justifyContent="center">
           <Button
             variant="contained"
@@ -328,10 +384,14 @@ const AppointmentDist: React.FC = () => {
             Distribute
           </Button>
         </Grid>
+
+        {/* Display error messages, if any */}
         <Grid item xs={12} container justifyContent="center">
           {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         </Grid>
       </Grid>
+
+      {/* Display the appointments that were recently distributed */}
       <Grid item xs={12}>
         <h3>Recently Distributed Appointments</h3>
         <List>
@@ -353,6 +413,8 @@ const AppointmentDist: React.FC = () => {
             </ListItem>
           ))}
         </List>
+
+        {/* Button to redo the distribution of appointments */}
         {recentlyDistributed.length > 0 && (
           <Button variant="contained" color="secondary" onClick={handleRedoAll}>
             Redo All

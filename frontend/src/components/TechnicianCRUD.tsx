@@ -12,6 +12,9 @@ import {
   Select,
 } from "@mui/material";
 
+import { Box, Tabs, Tab } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
 interface Technician {
   id: number;
   firstName: string;
@@ -26,7 +29,16 @@ const TechnicianCRUD: React.FC = () => {
   const [inputLastName, setInputLastName] = useState("");
   const [selectedWorkingDays, setSelectedWorkingDays] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
+  const getTabValue = () => {
+    const pathSegments = window.location.hash.replace("#/", "").split("/");
+    return pathSegments[pathSegments.length - 1] || "technician-crud";
+  };
+
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: string) => {
+    navigate(`/${newValue}`);
+  };
   const apiURL = "https://41026asdspa.com";
 
   // const apiURL = "http://localhost:4000";
@@ -95,6 +107,21 @@ const TechnicianCRUD: React.FC = () => {
 
   return (
     <div>
+      <Box sx={{ width: "100%" }}>
+        <Tabs
+          value={getTabValue()}
+          onChange={handleTabChange}
+          aria-label="navigation tabs"
+          variant="scrollable"
+          scrollButtons="auto"
+        >
+          <Tab label="Search" value="search-page" />
+          <Tab label="Technician Management" value="technician-crud" />
+          <Tab label="Service Management" value="service-crud" />
+          <Tab label="Appointment Distribution" value="appointment-dist" />
+          <Tab label="Turning Sheet" value="turning-sheet" />
+        </Tabs>
+      </Box>
       <h2>Technician CRUD</h2>
       <div>
         <TextField

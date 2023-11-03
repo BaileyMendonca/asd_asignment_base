@@ -19,6 +19,9 @@ import TurningSheet from "./components/TurningSheet";
 import TechnicianView from "./components/TechnicianView";
 import ManagerView from "./components/ManagerView";
 import ServicesView from "./components/ServicesView";
+import SearchPage from "./components/SearchPage";
+import WorkView from "./components/WorkView";
+
 
 // function App() {
 //   const { user, loginWithRedirect } = useAuth0();
@@ -35,10 +38,8 @@ function App() {
       <div className="App">
         <AppNav />
         {/* Add a Link to navigate to the CRUD page */}
-        <Link to="/technician-crud">Go to Technician CRUD</Link>
-        <Link to="/service-crud">Go to Service CRUD</Link>
-        <Link to="/appointment-dist">Go to appointment distribution</Link>
-        <Link to="/turning-sheet">Go to turning sheet</Link>
+
+
 
         {/* Define your routes using the Routes component */}
         <Routes>
@@ -49,6 +50,11 @@ function App() {
           <Route path="/service-crud" element={<ServiceCRUD />} />
           <Route path="/appointment-dist" element={<AppointmentDist />} />
           <Route path="/turning-sheet" element={<TurningSheet />} />
+          <Route path="/search-page" element={<SearchPage />} />
+          <Route path="/worker" element={<WorkView />} />
+
+          
+
         </Routes>
       </div>
     </HashRouter>

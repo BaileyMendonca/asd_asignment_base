@@ -49,4 +49,35 @@ export class AppointmentService {
       },
     });
   }
+  // Method to search for appointments by date and technician ID
+
+  async search(date?: string, technicianId?: number): Promise<Appointment[]> {
+    try {
+      const whereClause: Prisma.AppointmentWhereInput = {};
+
+      if (date) {
+        // Parse the provided date and create a range for that day
+        const startDate = new Date(date);
+        const endDate = new Date(date);
+
+        // Adjust endDate to the end of the day
+        endDate.setDate(startDate.getDate() + 1);
+        endDate.setSeconds(endDate.getSeconds() - 1);
+
+        whereClause.Date = {
+          gte: startDate, // greater than or equal to the start of the day
+          lt: endDate, // less than the end of the day
+        };
+      }
+
+      if (technicianId) whereClause.TechnicianID = technicianId;
+
+      return await this.prisma.appointment.findMany({
+        where: whereClause,
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error('Error retrieving appointments');
+    }
+  }
 }

@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Grid, List, ListItem, ListItemText, Paper } from "@mui/material";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useLocation } from "react-router-dom";
+import { Box, Tabs, Tab } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
+// Define interfaces for Technician, Appointment, and Service
 interface Technician {
   id: number;
   firstName: string;
@@ -10,6 +13,7 @@ interface Technician {
   currentPoints: number;
   WorkingDays: string[];
 }
+
 interface Appointment {
   AppointmentID?: number;
   TechnicianID: number | null;
@@ -18,6 +22,7 @@ interface Appointment {
   LockerNumber: number;
   Date: string;
 }
+
 interface Service {
   id: number;
   name: string;
@@ -25,29 +30,25 @@ interface Service {
   points: number;
 }
 
+// API Base URL
 const apiURL = "https://41026asdspa.com";
 
-// const apiURL = "http://localhost:4000";
-
 const TurningSheet: React.FC = () => {
-  const location = useLocation();
-  const recentlyDistributed = location?.state?.recentlyDistributed || [];
-  const [technicians, setTechnicians] = useState<Technician[]>([]);
-  const storedAppointments = JSON.parse(
-    localStorage.getItem("localAppointments") || "[]"
-  );
-  const [localAppointments, setLocalAppointments] = useState<Appointment[]>(
-    storedAppointments.length ? storedAppointments : recentlyDistributed
-  );
+  const navigate = useNavigate();
 
-  // Inside the TurningSheet component, at the beginning:
-  const isDistributedFromLocalStorage = JSON.parse(
-    localStorage.getItem("isDistributed") || "false"
-  );
-  const [isDistributed, setIsDistributed] = useState<boolean>(
-    isDistributedFromLocalStorage
-  );
+  const getTabValue = () => {
+    const pathSegments = window.location.hash.replace("#/", "").split("/");
+    return pathSegments[pathSegments.length - 1] || "technician-crud";
+  };
+
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: string) => {
+    navigate(`/${newValue}`);
+  };
+  const location = useLocation();
+  const [technicians, setTechnicians] = useState<Technician[]>([]);
+  const [localAppointments, setLocalAppointments] = useState<Appointment[]>([]);
   const [services, setServices] = useState<Service[]>([]);
+
   const getTodayDayName = (): string => {
     const days = [
       "Sunday",
@@ -62,47 +63,6 @@ const TurningSheet: React.FC = () => {
     return days[today.getDay()];
   };
 
-  useEffect(() => {
-    if (isDistributed) {
-      // TODO: Write logic to distribute the recentlyDistributed appointments to technicians.
-      setIsDistributed(false); // Reset the flag
-      localStorage.setItem("isDistributed", "false");
-    }
-  }, [isDistributed]);
-
-  useEffect(() => {
-    const recentlyDistributedFromLocalStorage = JSON.parse(
-      localStorage.getItem("recentlyDistributed") || "[]"
-    );
-    setLocalAppointments(recentlyDistributedFromLocalStorage);
-  }, []);
-
-  console.log(localAppointments);
-
-  useEffect(() => {
-    fetch(`${apiURL}/technicians`)
-      .then((response) => response.json())
-      .then((data) => {
-        setTechnicians(data);
-        data.forEach((tech: Technician) => {
-          fetch(`${apiURL}/technicians/${tech.id}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ currentPoints: 0 }),
-          });
-        });
-      });
-  }, []);
-
-  useEffect(() => {
-    fetch(`${apiURL}/services`)
-      .then((response) => response.json())
-      .then((data) => {
-        setServices(data);
-      });
-  }, []);
   const getServiceName = (ServiceID: number) => {
     const service = services.find((s) => s.id === ServiceID);
     return service ? service.name : "Unknown Service"; // default to 'Unknown Service' if not found
@@ -123,12 +83,9 @@ const TurningSheet: React.FC = () => {
 
   const handleDragEnd = (result: any) => {
     const { source, destination } = result;
-
-    // Do nothing if dropped outside of a droppable area
-    if (!destination) return;
+    if (!destination) return; // dropped outside the list
 
     const newTechnicianId = parseInt(destination.droppableId);
-
     const updatedAppointments = reorder(
       localAppointments,
       source.index,
@@ -136,81 +93,136 @@ const TurningSheet: React.FC = () => {
       newTechnicianId
     );
 
-    // Update the state
-    setLocalAppointments(updatedAppointments);
+    // Get the appointment that was moved
+    const movedAppointment = updatedAppointments[destination.index];
 
-    // Save the updated state to localStorage
-    localStorage.setItem(
-      "localAppointments",
-      JSON.stringify(updatedAppointments)
-    );
+    // Update the appointment in the database
+    fetch(`${apiURL}/appointments/${movedAppointment.AppointmentID}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ TechnicianID: newTechnicianId }), // update TechnicianID
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          // assuming the backend sends a success field in the response
+          // Update local state and local storage only after successful database update
+          setLocalAppointments(updatedAppointments);
+          localStorage.setItem(
+            "localAppointments",
+            JSON.stringify(updatedAppointments)
+          );
+        } else {
+          console.error("Failed to update appointment:", data.error);
+        }
+      })
+      .catch((error) => {
+        console.error("Network error:", error);
+      });
   };
 
+  // Fetch appointments from the database on initial render
+  useEffect(() => {
+    fetch(`${apiURL}/appointments`)
+      .then((response) => response.json())
+      .then((data) => setLocalAppointments(data));
+  }, []);
+
+  useEffect(() => {
+    fetch(`${apiURL}/technicians`)
+      .then((response) => response.json())
+      .then((data) => setTechnicians(data));
+  }, []);
+
+  useEffect(() => {
+    fetch(`${apiURL}/services`)
+      .then((response) => response.json())
+      .then((data) => setServices(data));
+  }, []);
+
+  // Render the TurningSheet component
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <Grid container spacing={2}>
-        {technicians
-          .filter((technician) =>
-            technician.WorkingDays.includes(getTodayDayName())
-          )
-          .map((technician, index) => (
-            <Grid item xs={4} key={technician.id}>
-              <Droppable droppableId={technician.id.toString()}>
-                {(provided) => (
-                  <Paper
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    style={{ minHeight: "200px", padding: "10px" }}
-                  >
-                    <h3>
-                      {technician.firstName} {technician.lastName}
-                    </h3>
-                    <List>
-                      {localAppointments
-                        .filter(
-                          (appointment) =>
-                            appointment.TechnicianID === technician.id
-                        )
-                        .map((appointment, index) => (
-                          <Draggable
-                            key={
-                              appointment.AppointmentID?.toString() ??
-                              "defaultID"
-                            }
-                            draggableId={
-                              appointment.AppointmentID?.toString() ??
-                              "defaultID"
-                            }
-                            index={index}
-                          >
-                            {(provided) => (
-                              <ListItem
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                              >
-                                <ListItemText
-                                  primary={`Time: ${
-                                    appointment.Time
-                                  }, Locker: ${
-                                    appointment.LockerNumber
-                                  }, Service: ${getServiceName(
-                                    appointment.ServiceID
-                                  )}`}
-                                />
-                              </ListItem>
-                            )}
-                          </Draggable>
-                        ))}
-                    </List>
-                    {provided.placeholder}
-                  </Paper>
-                )}
-              </Droppable>
-            </Grid>
-          ))}
-      </Grid>
-    </DragDropContext>
+    <Box sx={{ width: "100%" }}>
+      <Tabs
+        value={getTabValue()}
+        onChange={handleTabChange}
+        aria-label="navigation tabs"
+        variant="scrollable"
+        scrollButtons="auto"
+      >
+        <Tab label="Search" value="" />
+        <Tab label="Technician Management" value="technician-crud" />
+        <Tab label="Service Management" value="service-crud" />
+        <Tab label="Appointment Distribution" value="appointment-dist" />
+        <Tab label="Turning Sheet" value="turning-sheet" />
+      </Tabs>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Grid container spacing={2}>
+          {technicians
+            .filter((technician) =>
+              technician.WorkingDays.includes(getTodayDayName())
+            )
+            .map((technician, index) => (
+              <Grid item xs={4} key={technician.id}>
+                <Droppable droppableId={technician.id.toString()}>
+                  {(provided) => (
+                    <Paper
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={{ minHeight: "200px", padding: "10px" }}
+                    >
+                      <h3>
+                        {technician.firstName} {technician.lastName}
+                      </h3>
+                      <List>
+                        {localAppointments
+                          .filter(
+                            (appointment) =>
+                              appointment.TechnicianID === technician.id
+                          )
+                          .map((appointment, index) => (
+                            <Draggable
+                              key={
+                                appointment.AppointmentID?.toString() ??
+                                "defaultID"
+                              }
+                              draggableId={
+                                appointment.AppointmentID?.toString() ??
+                                "defaultID"
+                              }
+                              index={index}
+                            >
+                              {(provided) => (
+                                <ListItem
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  <ListItemText
+                                    primary={`Time: ${
+                                      appointment.Time
+                                    }, Locker: ${
+                                      appointment.LockerNumber
+                                    }, Service: ${getServiceName(
+                                      appointment.ServiceID
+                                    )}`}
+                                  />
+                                </ListItem>
+                              )}
+                            </Draggable>
+                          ))}
+                      </List>
+                      {provided.placeholder}
+                    </Paper>
+                  )}
+                </Droppable>
+              </Grid>
+            ))}
+        </Grid>
+      </DragDropContext>
+    </Box>
   );
 };
 
